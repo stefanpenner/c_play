@@ -1,5 +1,6 @@
 // c program that prints hello world
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 
@@ -62,6 +63,7 @@ void Node_printf(Node *node) {
     if (i++ > 10) {
       return;
     }
+
     if (first) {
       first = false;
     } else {
@@ -81,6 +83,17 @@ void Node_printf(Node *node) {
   }
 
   printf(")");
+}
+
+
+listOf(Node *node, Value *values, size_t length) {
+  for (int i = 0; i < length; i++) {
+    Node *next = node->next;
+    node->next = malloc(sizeof(Node));
+    node->data = &values[i];
+    node = node->next;
+    node->next = next;
+  }
 }
 
 int main(void)
@@ -153,25 +166,38 @@ int main(void)
     .next = &list_of_three_with_extra,
   };
 
-  printf("1: ");
-  Node_printf(&empty_list);
-  printf("\n");
-  printf("2: ");
-  Node_printf(&list_of_one);
-  printf("\n");
-  printf("3: ");
-  Node_printf(&list_of_two);
-  printf("\n");
-  printf("4: ");
-  Node_printf(&list_of_three);
-  printf("\n");
-  printf("5: ");
-  Node_printf(&list_of_empty_list);
-  printf("\n");
-  printf("6: ");
-  Node_printf(&list_of_three_with_extra);
-  printf("\n");
-  printf("7: ");
-  Node_printf(&mixed_list);
+
+  Node node;
+  Value values[4] = {
+    one,
+    two,
+    one,
+    two
+  };
+
+  listOf(&node, &values, 4);
+
+  Node_printf(&node);
+
+/*   printf("1: "); */
+/*   Node_printf(&empty_list); */
+/*   printf("\n"); */
+/*   printf("2: "); */
+/*   Node_printf(&list_of_one); */
+/*   printf("\n"); */
+/*   printf("3: "); */
+/*   Node_printf(&list_of_two); */
+/*   printf("\n"); */
+/*   printf("4: "); */
+/*   Node_printf(&list_of_three); */
+/*   printf("\n"); */
+/*   printf("5: "); */
+/*   Node_printf(&list_of_empty_list); */
+/*   printf("\n"); */
+/*   printf("6: "); */
+/*   Node_printf(&list_of_three_with_extra); */
+/*   printf("\n"); */
+/*   printf("7: "); */
+/*   Node_printf(&mixed_list); */
   printf("\n");
 }
