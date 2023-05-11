@@ -10,10 +10,8 @@ char * Type_toString(enum Type type) {
       return "FLOAT";
     case CHAR:
       return "CHAR";
-    case STRING:
-      return "STRING";
-    case OPERATION:
-      return "OPERATION";
+    case ATOM:
+      return "ATOM";
     default:
       return "UNKNOWN";
   }

@@ -7,8 +7,8 @@
 #include "./value.h"
 #include "./node.h"
 
-int main(void)
-{
+void test_node_printf(void) {
+  printf("test_node_printf:\n");
   Value one = {
     .type = INT,
     .data = 1,
@@ -77,15 +77,7 @@ int main(void)
     .next = &list_of_three_with_extra,
   };
 
-
-  Node node;
-  Value values[4] = {
-    one,
-    two,
-    one,
-    two
-  };
-
+  printf("1: ");
   Node_printf(&empty_list);
   printf("\n");
   printf("2: ");
@@ -106,4 +98,58 @@ int main(void)
   printf("7: ");
   Node_printf(&mixed_list);
   printf("\n");
+}
+
+void test_define_foo_five() {
+  printf("test_define_foo_five:\n");
+  /*
+   * (define foo 1)
+   * node (val define)
+   * node (val foo)
+   * node (val 1)
+   */
+
+  Value v_define = {
+    .type = ATOM,
+    .data = "define",
+    .size = 6,
+  };
+
+  Value v_foo = {
+    .type = ATOM,
+    .data = "foo",
+    .size = 3,
+  };
+
+  Value v_one = {
+    .type = INT,
+    .data = 1,
+    .size = 1,
+  };
+
+  Node n_one = {
+    .data = &v_one,
+    .next = NULL,
+  };
+
+  Node n_foo = {
+    .data = &v_foo,
+    .next = &n_one,
+  };
+
+  Node n_define = {
+    .data = &v_define,
+    .next = &n_foo,
+  };
+
+  printf("8: ");
+  Node_printf(&n_define);
+}
+
+int main(void)
+{
+  test_node_printf();
+  test_define_foo_five();
+  printf("\n");
+
 }
