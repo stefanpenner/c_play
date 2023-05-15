@@ -7,7 +7,7 @@
 #include "./value.h"
 #include "./node.h"
 
-void test_node_printf(void) {
+void test_Node_printf(void) {
   printf("test_node_printf:\n");
   Value one = {
     .type = INT,
@@ -38,12 +38,7 @@ void test_node_printf(void) {
     .next = NULL,
   };
 
-  Value empty_list_value = {
-    .type = LIST,
-    .data = &empty_list,
-  };
-
-  Node list_of_one= {
+  Node list_of_one = {
     .data = &three,
     .next = NULL,
   };
@@ -58,44 +53,39 @@ void test_node_printf(void) {
     .next = &list_of_two,
   };
 
-  Value list_of_three_value = {
-    .type = LIST,
-    .data = &list_of_three
-  };
-
   Node list_of_empty_list = {
-    .data = &empty_list_value,
+    .descendant = &empty_list,
   };
 
   Node list_of_three_with_extra = {
-    .data = &list_of_three_value,
+    .descendant = &list_of_one,
     .next = &list_of_three,
   };
 
   Node mixed_list = {
-    .data = &empty_list_value,
+    .descendant = &empty_list,
     .next = &list_of_three_with_extra,
   };
 
-  printf("1: ");
-  Node_printf(&empty_list);
-  printf("\n");
-  printf("2: ");
+  /* printf("  1: "); */
+  /* Node_printf(&empty_list); */
+  /* printf("\n"); */
+  printf("  2: ");
   Node_printf(&list_of_one);
   printf("\n");
-  printf("3: ");
+  printf("  3: ");
   Node_printf(&list_of_two);
   printf("\n");
-  printf("4: ");
+  printf("  4: ");
   Node_printf(&list_of_three);
   printf("\n");
-  printf("5: ");
+  printf("  5: ");
   Node_printf(&list_of_empty_list);
   printf("\n");
-  printf("6: ");
+  printf("  6: ");
   Node_printf(&list_of_three_with_extra);
   printf("\n");
-  printf("7: ");
+  printf("  7: ");
   Node_printf(&mixed_list);
   printf("\n");
 }
@@ -142,14 +132,67 @@ void test_define_foo_five() {
     .next = &n_foo,
   };
 
-  printf("8: ");
+  printf("  8: ");
   Node_printf(&n_define);
+}
+
+void _Node_from_string(char* string, Node* result) {
+  Node *previous = result;
+  // array of nodes
+
+  size_t len = strlen(string);
+  for (size_t i = 1; i < len; i++) {
+    switch (string[i - 1]) {
+      case '(':
+        {
+          Node *descendant= malloc(sizeof(Node));
+          descendant->data = NULL;
+          previous->descendant = descendant;
+          _Node_from_string(&string[i], descendant);
+        }
+        break;
+      case ')':
+        break;
+    }
+  }
+}
+
+Node* Node_from_string(char* string) {
+  printf("  %s:", string);
+  Node *result = malloc(sizeof(Node));
+  result->data = NULL;
+  result->descendant = NULL;
+  result->next = NULL;
+
+  _Node_from_string(string, result);
+
+  return result;
+}
+
+void test_Node_from_string() {
+  printf(" test_Node_from_string:\n");
+  printf("  ");
+  Node_printf(Node_from_string("()"));
+  printf("\n --- \n");
+  Node_printf(Node_from_string("(())"));
+  printf("\n  --- \n ");
+  Node_printf(Node_from_string("((()))"));
+  printf("\n  --- \n ");
+  Node_printf(Node_from_string("((1))"));
+  printf("\n  --- \n ");
+  Node_printf(Node_from_string("(1 1)"));
+  printf("\n  --- \n ");
+  Node_printf(Node_from_string("(1 (1) 1)"));
+  printf("\n  --- \n ");
+  Node_printf(Node_from_string("(1 ((1)) 1)"));
 }
 
 int main(void)
 {
-  test_node_printf();
+  test_Node_printf();
   test_define_foo_five();
+  test_Node_from_string();
   printf("\n");
+  return 0;
 
 }

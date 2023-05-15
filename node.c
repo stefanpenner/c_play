@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include "./value.h"
 #include "./node.h"
+#include <assert.h>
 
 void Node_printf(Node *node) {
   printf("(");
+
   int i = 0;
   int first = 0;
 
@@ -20,17 +22,18 @@ void Node_printf(Node *node) {
     }
 
     Value* value = node->data;
-    node = node->next;
 
-    if (value != NULL) {
-      if (value->type == LIST) {
-        Node_printf((Node*) value->data);
-      } else {
-        Value_printf(value);
-      }
+    // TODO: maybe be more explicit about a node who points to a value, or a
+    // node which points to a list
+    if (value) {
+      Value_printf(value);
+    } else if (node->descendant) {
+      Node_printf(node->descendant);
+    } else {
+      // an empty list
     }
-  }
 
+    node = node->next;
+  }
   printf(")");
 }
-
