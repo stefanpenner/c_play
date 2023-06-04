@@ -3,6 +3,15 @@
 #include "./node.h"
 #include <assert.h>
 
+Node* Node_new() {
+  Node *result = malloc(sizeof(Node));
+  result->data = NULL;
+  result->descendant = NULL;
+  result->next = NULL;
+
+  return result;
+}
+
 void Node_printf(Node *node) {
   printf("(");
 
@@ -49,8 +58,7 @@ void _Node_from_string(char* string, Node* result) {
     switch (string[i - 1]) {
       case '(':
         {
-          Node *descendant= malloc(sizeof(Node));
-          descendant->data = NULL;
+          Node *descendant = Node_new();
           previous->descendant = descendant;
           _Node_from_string(&string[i], descendant);
         }
@@ -62,13 +70,8 @@ void _Node_from_string(char* string, Node* result) {
 }
 
 Node* Node_from_string(char* string) {
-  Node *result = malloc(sizeof(Node));
-  result->data = NULL;
-  result->descendant = NULL;
-  result->next = NULL;
-
+  Node *result = Node_new();
   _Node_from_string(string, result);
-
   return result;
 }
 
