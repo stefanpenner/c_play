@@ -1,22 +1,21 @@
 CFLAGS := $(CFLAGS) -g -Wno-everything
-PROGRAM = l
-FILES = type.c value.c node.c l.c
+PROGRAM = main
+FILES = $(shell ls *.c)
 
 $(PROGRAM): $(FILES)
-	$(CC) $(CFLAGS) $(FILES) -o l
+	$(CC) $(CFLAGS) $(FILES) -o main
 
 .default: $(PROGRAM)
 
 .PHONY: clean crun run debug
 clean:
-	rm -rf l
+	rm -rf $(PROGRAM) *.dSYM
 
-run: l
-	./l
+run: $(PROGRAM)
+	./$(PROGRAM)
 
 crun: clean run
 
-
-debug: l
-	lldb ./l
+debug: $(PROGRAM)
+	lldb ./$(PROGRAM)
 
