@@ -67,25 +67,25 @@ void test_Node_printf(void) {
     .next = &list_of_three_with_extra,
   };
 
-  /* printf("  1: "); */
-  /* Node_printf(&empty_list); */
-  /* printf("\n"); */
-  printf("  2: ");
+  printf("  1: ");
+  Node_printf(&empty_list);
+  printf("\n");
+  printf("  2: (3::INT) == ");
   Node_printf(&list_of_one);
   printf("\n");
-  printf("  3: ");
+  printf("  3: (2::INT 3::INT) == ");
   Node_printf(&list_of_two);
   printf("\n");
-  printf("  4: ");
+  printf("  4: (1::INT 2::INT 3::INT) == ");
   Node_printf(&list_of_three);
   printf("\n");
-  printf("  5: ");
+  printf("  5: (()) == ");
   Node_printf(&list_of_empty_list);
   printf("\n");
-  printf("  6: ");
+  printf("  6: ((3::INT) 1::INT 2::INT 3::INT) == ");
   Node_printf(&list_of_three_with_extra);
   printf("\n");
-  printf("  7: ");
+  printf("  7: (() (3::INT) 1::INT 2::INT 3::INT) == ");
   Node_printf(&mixed_list);
   printf("\n");
 }
@@ -111,20 +111,20 @@ void test_define_foo_five() {
     .size = 3,
   };
 
-  Value v_one = {
+  Value v_five = {
     .type = INT,
-    .data = 1,
+    .data = 5,
     .size = 1,
   };
 
-  Node n_one = {
-    .data = &v_one,
+  Node n_five = {
+    .data = &v_five,
     .next = NULL,
   };
 
   Node n_foo = {
     .data = &v_foo,
-    .next = &n_one,
+    .next = &n_five,
   };
 
   Node n_define = {
@@ -136,61 +136,34 @@ void test_define_foo_five() {
   Node_printf(&n_define);
 }
 
-void _Node_from_string(char* string, Node* result) {
-  Node *previous = result;
-  // array of nodes
-
-  size_t len = strlen(string);
-  for (size_t i = 1; i < len; i++) {
-    switch (string[i - 1]) {
-      case '(':
-        {
-          Node *descendant= malloc(sizeof(Node));
-          descendant->data = NULL;
-          previous->descendant = descendant;
-          _Node_from_string(&string[i], descendant);
-        }
-        break;
-      case ')':
-        break;
-    }
-  }
-}
-
-Node* Node_from_string(char* string) {
-  printf("  %s:", string);
-  Node *result = malloc(sizeof(Node));
-  result->data = NULL;
-  result->descendant = NULL;
-  result->next = NULL;
-
-  _Node_from_string(string, result);
-
-  return result;
-}
-
 void test_Node_from_string() {
   printf(" test_Node_from_string:\n");
-  printf("  ");
+  printf("  () == ");
   Node_printf(Node_from_string("()"));
   printf("\n --- \n");
+  printf("  (()) == ");
   Node_printf(Node_from_string("(())"));
   printf("\n  --- \n ");
+  printf("  ((())) == ");
   Node_printf(Node_from_string("((()))"));
   printf("\n  --- \n ");
+  printf("  ((1::INT)) == ");
   Node_printf(Node_from_string("((1))"));
   printf("\n  --- \n ");
+  printf("  (1::INT 1::INT) == ");
   Node_printf(Node_from_string("(1 1)"));
   printf("\n  --- \n ");
+  printf("  (1::INT (1::INT) 1::INT) == ");
   Node_printf(Node_from_string("(1 (1) 1)"));
   printf("\n  --- \n ");
+  printf("  (1::INT ((1::INT)) 1::INT) == ");
   Node_printf(Node_from_string("(1 ((1)) 1)"));
 }
 
 int main(void)
 {
-  test_Node_printf();
-  test_define_foo_five();
+  /* test_Node_printf(); */
+  /* test_define_foo_five(); */
   test_Node_from_string();
   printf("\n");
   return 0;

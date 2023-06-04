@@ -8,4 +8,5 @@ typedef struct Node
   Value *data;
 } Node;
 
+Node* Node_from_string(char* string);
 #endif

@@ -37,3 +37,38 @@ void Node_printf(Node *node) {
   }
   printf(")");
 }
+
+
+
+void _Node_from_string(char* string, Node* result) {
+  Node *previous = result;
+  // array of nodes
+
+  size_t len = strlen(string);
+  for (size_t i = 1; i < len; i++) {
+    switch (string[i - 1]) {
+      case '(':
+        {
+          Node *descendant= malloc(sizeof(Node));
+          descendant->data = NULL;
+          previous->descendant = descendant;
+          _Node_from_string(&string[i], descendant);
+        }
+        break;
+      case ')':
+        break;
+    }
+  }
+}
+
+Node* Node_from_string(char* string) {
+  Node *result = malloc(sizeof(Node));
+  result->data = NULL;
+  result->descendant = NULL;
+  result->next = NULL;
+
+  _Node_from_string(string, result);
+
+  return result;
+}
+
